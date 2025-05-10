@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import { getStreetCleaningGeoJSON } from '@/lib/streetCleaningData';
 
 interface MapProps {
   center?: [number, number];
@@ -59,48 +60,16 @@ const Map: React.FC<MapProps> = ({ center = [-118.243683, 34.052235], isParked =
           .addTo(map.current);
       }
 
-      // Add street cleaning overlay (simulated for demo)
+      // Add street cleaning overlay using our real data
       map.current.on('load', () => {
         if (!map.current) return;
         
-        // This would be real data from LA city API in production
+        // Get GeoJSON from our utility function
+        const streetCleaningData = getStreetCleaningGeoJSON(center);
+        
         map.current.addSource('street-cleaning', {
           type: 'geojson',
-          data: {
-            type: 'FeatureCollection',
-            features: [
-              {
-                type: 'Feature',
-                geometry: {
-                  type: 'LineString',
-                  coordinates: [
-                    [center[0] - 0.004, center[1] - 0.002],
-                    [center[0] + 0.004, center[1] - 0.002],
-                  ]
-                },
-                properties: {
-                  name: 'Wilshire Blvd',
-                  day: 'Tuesday',
-                  time: '8:00 AM - 11:00 AM'
-                }
-              },
-              {
-                type: 'Feature',
-                geometry: {
-                  type: 'LineString',
-                  coordinates: [
-                    [center[0] + 0.002, center[1] - 0.005],
-                    [center[0] + 0.002, center[1] + 0.005],
-                  ]
-                },
-                properties: {
-                  name: 'Figueroa St',
-                  day: 'Wednesday',
-                  time: '10:00 AM - 12:00 PM'
-                }
-              }
-            ]
-          }
+          data: streetCleaningData
         });
 
         map.current.addLayer({
@@ -134,6 +103,8 @@ const Map: React.FC<MapProps> = ({ center = [-118.243683, 34.052235], isParked =
               <div class="p-2">
                 <h3 class="font-medium">${properties.name}</h3>
                 <p class="text-sm">Street Cleaning: ${properties.day}, ${properties.time}</p>
+                <p class="text-xs text-sweepsafe-gray">Side: ${properties.side}</p>
+                <p class="text-xs text-sweepsafe-gray">Between ${properties.from_street} and ${properties.to_street}</p>
               </div>
             `)
             .addTo(map.current);

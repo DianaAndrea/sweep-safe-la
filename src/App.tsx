@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import OnboardingPage from "./pages/OnboardingPage";
 import MainView from "./pages/MainView";
 import SettingsPage from "./pages/SettingsPage";
+import SchedulePage from "./pages/SchedulePage";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/onboarding" element={<OnboardingPage />} />
           <Route path="/main" element={<MainView />} />
           <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/schedule" element={<SchedulePage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

@@ -5,9 +5,15 @@ import { ParkingStatus } from '@/components/ui-components/ParkingStatus';
 import { ActionButton } from '@/components/ui-components/ActionButton';
 import { NotificationCard } from '@/components/ui-components/NotificationCard';
 import { Button } from '@/components/ui/button';
-import { Settings } from 'lucide-react';
+import { Settings, Calendar } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
+import { 
+  getRandomStreetSchedule,
+  getNextStreetCleaningDateTime,
+  getParkingRestrictionText,
+  StreetCleaningSchedule
+} from '@/lib/streetCleaningData';
 
 const MainView = () => {
   const [isParked, setIsParked] = useState(false);
@@ -15,42 +21,39 @@ const MainView = () => {
   const [location, setLocation] = useState<[number, number]>([-118.243683, 34.052235]);
   const [streetName, setStreetName] = useState('');
   const [nextSweeping, setNextSweeping] = useState<Date | undefined>(undefined);
+  const [parkingRestriction, setParkingRestriction] = useState<string | undefined>(undefined);
+  const [currentSchedule, setCurrentSchedule] = useState<StreetCleaningSchedule | undefined>(undefined);
   const navigate = useNavigate();
   const { toast } = useToast();
-  
-  // Simulate getting street data when location changes
+
+  // Get street data when location changes and parking is active
   useEffect(() => {
     if (isParked) {
-      // This would come from a real API in production
-      // Simulating data for demo purposes
-      const mockStreets = [
-        { name: '7th Street', restriction: 'No Parking: Wed 8am-10am' },
-        { name: 'Wilshire Blvd', restriction: 'No Parking: Thu 10am-12pm' },
-        { name: 'Figueroa St', restriction: 'No Parking: Tue 8am-11am' },
-        { name: 'Olympic Blvd', restriction: 'No Parking: Fri 8am-10am' },
-        { name: 'Grand Ave', restriction: 'No Parking: Mon 7am-9am' }
-      ];
-      
-      // Randomly select a street
-      const randomIndex = Math.floor(Math.random() * mockStreets.length);
-      setStreetName(mockStreets[randomIndex].name);
-      
-      // Set next sweeping time
-      const now = new Date();
-      // Random hours in the future (between 1 and 12 hours)
-      const hoursInFuture = Math.floor(Math.random() * 12) + 1;
-      const sweepingTime = new Date(now.getTime() + hoursInFuture * 60 * 60 * 1000);
+      // In a real app, we would find the nearest street based on coordinates
+      // For prototype, we'll use a random street from our data
+      const schedule = getRandomStreetSchedule();
+      setCurrentSchedule(schedule);
+      setStreetName(schedule.street_name);
+
+      // Calculate next cleaning time based on the schedule
+      const sweepingTime = getNextStreetCleaningDateTime(schedule);
       setNextSweeping(sweepingTime);
       
+      // Set parking restriction text
+      const restriction = getParkingRestrictionText(schedule);
+      setParkingRestriction(restriction);
+
       // Show toast notification
       toast({
         title: "Parking detected",
-        description: `${mockStreets[randomIndex].restriction}`,
+        description: restriction,
         duration: 5000,
       });
     } else {
       setStreetName('');
       setNextSweeping(undefined);
+      setParkingRestriction(undefined);
+      setCurrentSchedule(undefined);
     }
   }, [isParked, location, toast]);
 
@@ -63,7 +66,7 @@ const MainView = () => {
       });
     } else {
       // In a real app, this would use the device's actual GPS
-      // For demo purposes, we'll set a random location near the center
+      // For prototype, we'll set a random location near the center
       const newLat = 34.052235 + (Math.random() * 0.01 - 0.005);
       const newLng = -118.243683 + (Math.random() * 0.01 - 0.005);
       setLocation([newLng, newLat]);
@@ -86,7 +89,7 @@ const MainView = () => {
     if (!nextSweeping) return undefined;
     
     // In real app, this would be calculated based on user settings
-    // For demo, show alert 1 hour before
+    // For prototype, show alert 1 hour before
     const alertTime = new Date(nextSweeping);
     alertTime.setHours(alertTime.getHours() - 1);
     
@@ -96,17 +99,44 @@ const MainView = () => {
     });
   };
 
+  const handleViewSchedule = () => {
+    // For prototype, we'll just show a toast notification
+    // In a real app, this would navigate to a schedules page
+    if (currentSchedule) {
+      toast({
+        title: `${currentSchedule.street_name} Cleaning Schedule`,
+        description: `${currentSchedule.day}: ${currentSchedule.from_hour} - ${currentSchedule.to_hour} (${currentSchedule.sweep_side} side)`,
+        duration: 5000,
+      });
+    } else {
+      toast({
+        title: "No active schedule",
+        description: "Park to see the street cleaning schedule",
+      });
+    }
+  };
+
   return (
     <div className="h-screen flex flex-col">
       <header className="bg-white shadow-sm p-4 flex justify-between items-center">
         <h1 className="text-xl font-bold text-sweepsafe-blue">SweepSafe</h1>
-        <Button 
-          variant="ghost" 
-          size="icon"
-          onClick={() => navigate('/settings')}
-        >
-          <Settings className="h-5 w-5" />
-        </Button>
+        <div className="flex space-x-2">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={handleViewSchedule}
+            title="View Schedule"
+          >
+            <Calendar className="h-5 w-5" />
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={() => navigate('/settings')}
+          >
+            <Settings className="h-5 w-5" />
+          </Button>
+        </div>
       </header>
       
       <div className="flex-1 relative">
@@ -117,7 +147,7 @@ const MainView = () => {
             isParked={isParked} 
             streetName={streetName} 
             sweepingDate={nextSweeping}
-            parkingRestriction={isParked ? "No Parking: Street Cleaning" : undefined}
+            parkingRestriction={parkingRestriction}
           />
         </div>
         
