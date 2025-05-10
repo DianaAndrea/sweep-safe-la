@@ -1,4 +1,5 @@
-import streetCleaningData from '../Resources/Assets/simplified_street_cleaning.json';
+import streetCleaningData from '@/Resources/Assets/simplified_street_cleaning.json';
+
 
 // Types for street cleaning data
 export interface StreetCleaningSchedule {
