@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Map from '@/components/Map';
 import { ParkingStatus } from '@/components/ui-components/ParkingStatus';
@@ -100,20 +99,7 @@ const MainView = () => {
   };
 
   const handleViewSchedule = () => {
-    // For prototype, we'll just show a toast notification
-    // In a real app, this would navigate to a schedules page
-    if (currentSchedule) {
-      toast({
-        title: `${currentSchedule.street_name} Cleaning Schedule`,
-        description: `${currentSchedule.day}: ${currentSchedule.from_hour} - ${currentSchedule.to_hour} (${currentSchedule.sweep_side} side)`,
-        duration: 5000,
-      });
-    } else {
-      toast({
-        title: "No active schedule",
-        description: "Park to see the street cleaning schedule",
-      });
-    }
+    navigate('/schedule');
   };
 
   return (
