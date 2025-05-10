@@ -1,73 +1,86 @@
-# Welcome to your Lovable project
+# **SweepSafe**
 
-## Project info
+**Avoid street cleaning tickets in Los Angeles** with this mobile-first web app. SweepSafe detects when you park, checks street cleaning schedules, and sends you timely alerts so you can move your car before the sweepers arrive.
 
-**URL**: https://lovable.dev/projects/cfcdee56-c948-4940-947a-f58a31d83613
+---
 
-## How can I edit this code?
+## **🚀 Features**
 
-There are several ways of editing your application.
+* Smart detection of parked location using GPS \+ motion logic
 
-**Use Lovable**
+* Real-time map view with countdown to next street cleaning
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/cfcdee56-c948-4940-947a-f58a31d83613) and start prompting.
+* Push or SMS notifications before sweep time
 
-Changes made via Lovable will be committed automatically to this repo.
+* Parking history log
 
-**Use your preferred IDE**
+* Customizable alert preferences
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+* Social login with Google, Facebook, and X.com
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+---
 
-Follow these steps:
+## **📱 Tech Stack**
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+* **Frontend:** React \+ Tailwind CSS
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+* **Maps:** Leaflet.js or Mapbox
 
-# Step 3: Install the necessary dependencies.
-npm i
+* **Location:** Geolocation API
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+* **Notifications:** Web Push API or OneSignal (optional SMS via Twilio)
 
-**Edit a file directly in GitHub**
+* **Backend:** Firebase (Firestore \+ Auth)
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+* **Data Source:** LA Open Data (Street Cleaning GeoJSON)
 
-**Use GitHub Codespaces**
+---
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## **🔐 Security & Privacy**
 
-## What technologies are used for this project?
+* OAuth login via trusted providers
 
-This project is built with:
+* HTTPS everywhere
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+* Opt-in only location logging
 
-## How can I deploy this project?
+* Transparent privacy settings
 
-Simply open [Lovable](https://lovable.dev/projects/cfcdee56-c948-4940-947a-f58a31d83613) and click on Share -> Publish.
+---
 
-## Can I connect a custom domain to my Lovable project?
+## **🛠️ Setup Instructions**
 
-Yes, you can!
+1. Clone this repo
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+2. Run `npm install`
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+3. Add Firebase project keys and OneSignal/Twilio credentials
+
+4. Run the app locally with `npm run dev`
+
+5. Deploy via Vercel, Netlify, or Firebase Hosting
+
+---
+
+## **🗺️ Roadmap**
+
+* MVP with core alerts and map view
+
+* Add SMS backup alerts
+
+* PWA support for offline use
+
+* Expansion to other cities
+
+---
+
+## **📫 Contributing**
+
+Got a suggestion, feature request, or want to help? Open an issue or submit a pull request.
+
+---
+
+## **License**
+
+MIT
+
