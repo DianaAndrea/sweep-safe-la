@@ -16,5 +16,284 @@
     "sweep_side": "SOUTH",
     "from_street": "Vine",
     "to_street": "Western"
+  },
+  {
+    "street_name": "Spring St",
+    "day": "MONDAY",
+    "from_hour": "8:00AM",
+    "to_hour": "10:00AM",
+    "sweep_side": "WEST",
+    "from_street": "1st St",
+    "to_street": "5th St"
+  },
+  {
+    "street_name": "Spring St",
+    "day": "THURSDAY",
+    "from_hour": "8:00AM",
+    "to_hour": "10:00AM",
+    "sweep_side": "EAST",
+    "from_street": "1st St",
+    "to_street": "5th St"
+  },
+  {
+    "street_name": "Main St",
+    "day": "TUESDAY",
+    "from_hour": "8:00AM",
+    "to_hour": "10:00AM",
+    "sweep_side": "WEST",
+    "from_street": "1st St",
+    "to_street": "7th St"
+  },
+  {
+    "street_name": "Main St",
+    "day": "FRIDAY",
+    "from_hour": "8:00AM",
+    "to_hour": "10:00AM",
+    "sweep_side": "EAST",
+    "from_street": "1st St",
+    "to_street": "7th St"
+  },
+  {
+    "street_name": "Broadway",
+    "day": "MONDAY",
+    "from_hour": "10:00AM",
+    "to_hour": "12:00PM",
+    "sweep_side": "WEST",
+    "from_street": "1st St",
+    "to_street": "9th St"
+  },
+  {
+    "street_name": "Broadway",
+    "day": "THURSDAY",
+    "from_hour": "10:00AM",
+    "to_hour": "12:00PM",
+    "sweep_side": "EAST",
+    "from_street": "1st St",
+    "to_street": "9th St"
+  },
+  {
+    "street_name": "Hill St",
+    "day": "TUESDAY",
+    "from_hour": "10:00AM",
+    "to_hour": "12:00PM",
+    "sweep_side": "WEST",
+    "from_street": "1st St",
+    "to_street": "9th St"
+  },
+  {
+    "street_name": "Olive St",
+    "day": "WEDNESDAY",
+    "from_hour": "8:00AM",
+    "to_hour": "10:00AM",
+    "sweep_side": "EAST",
+    "from_street": "5th St",
+    "to_street": "9th St"
+  },
+  {
+    "street_name": "Grand Ave",
+    "day": "WEDNESDAY",
+    "from_hour": "10:00AM",
+    "to_hour": "12:00PM",
+    "sweep_side": "WEST",
+    "from_street": "1st St",
+    "to_street": "11th St"
+  },
+  {
+    "street_name": "Hope St",
+    "day": "THURSDAY",
+    "from_hour": "8:00AM",
+    "to_hour": "10:00AM",
+    "sweep_side": "EAST",
+    "from_street": "3rd St",
+    "to_street": "9th St"
+  },
+  {
+    "street_name": "Flower St",
+    "day": "FRIDAY",
+    "from_hour": "8:00AM",
+    "to_hour": "10:00AM",
+    "sweep_side": "WEST",
+    "from_street": "4th St",
+    "to_street": "11th St"
+  },
+  {
+    "street_name": "Figueroa St",
+    "day": "MONDAY",
+    "from_hour": "8:00AM",
+    "to_hour": "10:00AM",
+    "sweep_side": "EAST",
+    "from_street": "3rd St",
+    "to_street": "Olympic Blvd"
+  },
+  {
+    "street_name": "Los Angeles St",
+    "day": "WEDNESDAY",
+    "from_hour": "8:00AM",
+    "to_hour": "10:00AM",
+    "sweep_side": "WEST",
+    "from_street": "1st St",
+    "to_street": "7th St"
+  },
+  {
+    "street_name": "San Pedro St",
+    "day": "TUESDAY",
+    "from_hour": "10:00AM",
+    "to_hour": "12:00PM",
+    "sweep_side": "EAST",
+    "from_street": "5th St",
+    "to_street": "9th St"
+  },
+  {
+    "street_name": "1st St",
+    "day": "MONDAY",
+    "from_hour": "12:00PM",
+    "to_hour": "2:00PM",
+    "sweep_side": "NORTH",
+    "from_street": "Figueroa",
+    "to_street": "Alameda"
+  },
+  {
+    "street_name": "2nd St",
+    "day": "TUESDAY",
+    "from_hour": "12:00PM",
+    "to_hour": "2:00PM",
+    "sweep_side": "SOUTH",
+    "from_street": "Figueroa",
+    "to_street": "Central"
+  },
+  {
+    "street_name": "3rd St",
+    "day": "WEDNESDAY",
+    "from_hour": "12:00PM",
+    "to_hour": "2:00PM",
+    "sweep_side": "NORTH",
+    "from_street": "Figueroa",
+    "to_street": "Alameda"
+  },
+  {
+    "street_name": "4th St",
+    "day": "THURSDAY",
+    "from_hour": "12:00PM",
+    "to_hour": "2:00PM",
+    "sweep_side": "SOUTH",
+    "from_street": "Figueroa",
+    "to_street": "Central"
+  },
+  {
+    "street_name": "5th St",
+    "day": "FRIDAY",
+    "from_hour": "12:00PM",
+    "to_hour": "2:00PM",
+    "sweep_side": "NORTH",
+    "from_street": "Figueroa",
+    "to_street": "San Pedro"
+  },
+  {
+    "street_name": "6th St",
+    "day": "MONDAY",
+    "from_hour": "1:00PM",
+    "to_hour": "3:00PM",
+    "sweep_side": "SOUTH",
+    "from_street": "Bixel",
+    "to_street": "Central"
+  },
+  {
+    "street_name": "7th St",
+    "day": "TUESDAY",
+    "from_hour": "1:00PM",
+    "to_hour": "3:00PM",
+    "sweep_side": "NORTH",
+    "from_street": "Figueroa",
+    "to_street": "Alameda"
+  },
+  {
+    "street_name": "8th St",
+    "day": "WEDNESDAY",
+    "from_hour": "1:00PM",
+    "to_hour": "3:00PM",
+    "sweep_side": "SOUTH",
+    "from_street": "Figueroa",
+    "to_street": "San Pedro"
+  },
+  {
+    "street_name": "9th St",
+    "day": "THURSDAY",
+    "from_hour": "1:00PM",
+    "to_hour": "3:00PM",
+    "sweep_side": "NORTH",
+    "from_street": "Figueroa",
+    "to_street": "San Pedro"
+  },
+  {
+    "street_name": "Olympic Blvd",
+    "day": "FRIDAY",
+    "from_hour": "10:00AM",
+    "to_hour": "12:00PM",
+    "sweep_side": "SOUTH",
+    "from_street": "Figueroa",
+    "to_street": "Central"
+  },
+  {
+    "street_name": "Alameda St",
+    "day": "WEDNESDAY",
+    "from_hour": "9:00AM",
+    "to_hour": "11:00AM",
+    "sweep_side": "EAST",
+    "from_street": "Cesar Chavez",
+    "to_street": "7th St"
+  },
+  {
+    "street_name": "Central Ave",
+    "day": "THURSDAY",
+    "from_hour": "9:00AM",
+    "to_hour": "11:00AM",
+    "sweep_side": "WEST",
+    "from_street": "1st St",
+    "to_street": "9th St"
+  },
+  {
+    "street_name": "Cesar Chavez Ave",
+    "day": "MONDAY",
+    "from_hour": "9:00AM",
+    "to_hour": "11:00AM",
+    "sweep_side": "NORTH",
+    "from_street": "Figueroa",
+    "to_street": "Alameda"
+  },
+  {
+    "street_name": "Temple St",
+    "day": "TUESDAY",
+    "from_hour": "9:00AM",
+    "to_hour": "11:00AM",
+    "sweep_side": "SOUTH",
+    "from_street": "Figueroa",
+    "to_street": "Alameda"
+  },
+  {
+    "street_name": "Wilshire Blvd",
+    "day": "FRIDAY",
+    "from_hour": "9:00AM",
+    "to_hour": "11:00AM",
+    "sweep_side": "NORTH",
+    "from_street": "Figueroa",
+    "to_street": "Alvarado"
+  },
+  {
+    "street_name": "Wall St",
+    "day": "MONDAY",
+    "from_hour": "10:00AM",
+    "to_hour": "12:00PM",
+    "sweep_side": "EAST",
+    "from_street": "5th St",
+    "to_street": "9th St"
+  },
+  {
+    "street_name": "Maple Ave",
+    "day": "THURSDAY",
+    "from_hour": "10:00AM",
+    "to_hour": "12:00PM",
+    "sweep_side": "WEST",
+    "from_street": "7th St",
+    "to_street": "Olympic Blvd"
   }
 ]

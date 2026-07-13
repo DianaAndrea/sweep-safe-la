@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import MapboxTokenForm from './map/MapboxTokenForm';
-import { setupMapMarkers } from './map/MapMarkers';
+import { setupMapMarkers, createParkingMarker } from './map/MapMarkers';
 import { addStreetCleaningLayer, setupStreetCleaningInteractions } from './map/StreetCleaningLayer';
 
 interface MapProps {
@@ -14,58 +14,80 @@ interface MapProps {
 const Map: React.FC<MapProps> = ({ center = [-118.243683, 34.052235], isParked = false }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const marker = useRef<mapboxgl.Marker | null>(null);
+  const locationMarker = useRef<mapboxgl.Marker | null>(null);
+  const parkingMarker = useRef<mapboxgl.Marker | null>(null);
   const [mapboxToken, setMapboxToken] = useState<string>('');
 
+  // Initialize the map ONCE, after a token is provided. We deliberately keep
+  // this effect out of the center/isParked update cycle so the map is never
+  // torn down and rebuilt on every interaction (that was the source of the
+  // flicker/jank).
   useEffect(() => {
-    // Only initialize the map if we have a token and the container is available
-    if (mapboxToken && mapContainer.current && !map.current) {
-      mapboxgl.accessToken = mapboxToken;
-      
-      map.current = new mapboxgl.Map({
-        container: mapContainer.current,
-        style: 'mapbox://styles/mapbox/streets-v12',
-        center,
-        zoom: 15,
-        pitch: 0,
-        attributionControl: false
-      });
+    if (!mapboxToken || !mapContainer.current || map.current) return;
 
-      map.current.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
-      
-      // Create map markers
-      marker.current = setupMapMarkers({
-        map: map.current,
-        center,
-        isParked
-      });
+    mapboxgl.accessToken = mapboxToken;
 
-      // Add street cleaning overlay using our real data
-      map.current.on('load', () => {
-        if (!map.current) return;
-        
-        addStreetCleaningLayer(map.current, center);
-        setupStreetCleaningInteractions(map.current);
-      });
-    }
+    map.current = new mapboxgl.Map({
+      container: mapContainer.current,
+      style: 'mapbox://styles/mapbox/streets-v12',
+      center,
+      zoom: 15,
+      pitch: 0,
+      attributionControl: false,
+    });
+
+    map.current.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+
+    const markers = setupMapMarkers({ map: map.current, center, isParked });
+    locationMarker.current = markers.locationMarker;
+    parkingMarker.current = markers.parkingMarker;
+
+    map.current.on('load', () => {
+      if (!map.current) return;
+      addStreetCleaningLayer(map.current, center);
+      setupStreetCleaningInteractions(map.current);
+    });
+
+    // Keep the map canvas in sync whenever its container changes size, e.g.
+    // when the user expands or collapses the map panel. Without this the
+    // canvas keeps its old dimensions and the map renders incorrectly.
+    const resizeObserver = new ResizeObserver(() => {
+      map.current?.resize();
+    });
+    resizeObserver.observe(mapContainer.current);
 
     return () => {
-      if (map.current) {
-        map.current.remove();
-        map.current = null;
-      }
+      resizeObserver.disconnect();
+      map.current?.remove();
+      map.current = null;
+      locationMarker.current = null;
+      parkingMarker.current = null;
     };
-  }, [center, mapboxToken, isParked]);
+    // Only re-run when the token changes; center/isParked are handled below.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mapboxToken]);
 
-  // Update marker position when the parked status changes
+  // Recenter the map and move the "you are here" marker when the location changes.
   useEffect(() => {
-    if (map.current && marker.current) {
-      if (isParked) {
-        marker.current.setLngLat([center[0] + 0.0005, center[1] + 0.0002]);
+    if (!map.current) return;
+    map.current.flyTo({ center, essential: true });
+    locationMarker.current?.setLngLat(center);
+  }, [center]);
+
+  // Show or hide the parking marker as the parked state changes.
+  useEffect(() => {
+    if (!map.current) return;
+
+    if (isParked) {
+      const parkedPosition: [number, number] = [center[0] + 0.0005, center[1] + 0.0002];
+      if (parkingMarker.current) {
+        parkingMarker.current.setLngLat(parkedPosition);
       } else {
-        marker.current.remove();
-        marker.current = null;
+        parkingMarker.current = createParkingMarker(map.current, center);
       }
+    } else {
+      parkingMarker.current?.remove();
+      parkingMarker.current = null;
     }
   }, [isParked, center]);
 

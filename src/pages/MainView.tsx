@@ -4,10 +4,10 @@ import { ParkingStatus } from '@/components/ui-components/ParkingStatus';
 import { ActionButton } from '@/components/ui-components/ActionButton';
 import { NotificationCard } from '@/components/ui-components/NotificationCard';
 import { Button } from '@/components/ui/button';
-import { Settings, Calendar } from 'lucide-react';
+import { Settings, Calendar, ChevronUp, ChevronDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
-import { 
+import {
   getRandomStreetSchedule,
   getNextStreetCleaningDateTime,
   getParkingRestrictionText,
@@ -22,6 +22,9 @@ const MainView = () => {
   const [nextSweeping, setNextSweeping] = useState<Date | undefined>(undefined);
   const [parkingRestriction, setParkingRestriction] = useState<string | undefined>(undefined);
   const [currentSchedule, setCurrentSchedule] = useState<StreetCleaningSchedule | undefined>(undefined);
+  // Controls how much of the screen the map takes. Collapsed by default so the
+  // status cards below are visible right away; tap to expand the map full-height.
+  const [mapExpanded, setMapExpanded] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -37,10 +40,13 @@ const MainView = () => {
       // Calculate next cleaning time based on the schedule
       const sweepingTime = getNextStreetCleaningDateTime(schedule);
       setNextSweeping(sweepingTime);
-      
+
       // Set parking restriction text
       const restriction = getParkingRestrictionText(schedule);
       setParkingRestriction(restriction);
+
+      // Bring the cards into view so the driver immediately sees the rules.
+      setMapExpanded(false);
 
       // Show toast notification
       toast({
@@ -75,25 +81,25 @@ const MainView = () => {
 
   const handleNotificationToggle = (enabled: boolean) => {
     setNotificationsEnabled(enabled);
-    
+
     toast({
       title: enabled ? "Notifications enabled" : "Notifications disabled",
-      description: enabled 
-        ? "You'll receive alerts before street cleaning" 
+      description: enabled
+        ? "You'll receive alerts before street cleaning"
         : "You won't receive parking alerts",
     });
   };
-  
+
   const getNextAlertTime = () => {
     if (!nextSweeping) return undefined;
-    
+
     // In real app, this would be calculated based on user settings
     // For prototype, show alert 1 hour before
     const alertTime = new Date(nextSweeping);
     alertTime.setHours(alertTime.getHours() - 1);
-    
+
     return alertTime.toLocaleTimeString([], {
-      hour: 'numeric', 
+      hour: 'numeric',
       minute: '2-digit'
     });
   };
@@ -103,8 +109,8 @@ const MainView = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col">
-      <header className="bg-white shadow-sm p-4 flex justify-between items-center">
+    <div className="h-screen flex flex-col overflow-hidden bg-background">
+      <header className="bg-white shadow-sm p-4 flex justify-between items-center flex-shrink-0 z-20">
         <h1 className="text-xl font-bold text-sweepsafe-blue">SweepSafe</h1>
         <div className="flex space-x-2">
           <Button
@@ -115,8 +121,8 @@ const MainView = () => {
           >
             <Calendar className="h-5 w-5" />
           </Button>
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             size="icon"
             onClick={() => navigate('/settings')}
           >
@@ -124,29 +130,53 @@ const MainView = () => {
           </Button>
         </div>
       </header>
-      
-      <div className="flex-1 relative">
+
+      {/* Map panel — height animates between a compact and an expanded state */}
+      <div
+        className="relative w-full flex-shrink-0 transition-[height] duration-300 ease-in-out"
+        style={{ height: mapExpanded ? 'calc(100vh - 8rem)' : '42vh' }}
+      >
         <Map center={location} isParked={isParked} />
-        
-        <div className="absolute inset-x-0 bottom-24 px-4 z-10">
-          <ParkingStatus 
-            isParked={isParked} 
-            streetName={streetName} 
-            sweepingDate={nextSweeping}
-            parkingRestriction={parkingRestriction}
-          />
-        </div>
-        
-        <div className="absolute inset-x-0 bottom-4 px-4 z-10 flex justify-center">
-          <ActionButton 
-            onClick={handleToggleParking} 
-            isParked={isParked} 
-          />
-        </div>
+
+        {/* Expand / collapse toggle */}
+        <button
+          type="button"
+          onClick={() => setMapExpanded((v) => !v)}
+          aria-label={mapExpanded ? 'Shrink map to show details' : 'Expand map'}
+          aria-expanded={mapExpanded}
+          className="absolute left-1/2 -translate-x-1/2 bottom-3 z-10 flex items-center gap-1.5 rounded-full bg-white/95 px-4 py-2 text-sm font-medium text-sweepsafe-blue shadow-lg backdrop-blur transition active:scale-95"
+        >
+          {mapExpanded ? (
+            <>
+              <ChevronDown className="h-4 w-4" />
+              Show details
+            </>
+          ) : (
+            <>
+              <ChevronUp className="h-4 w-4" />
+              Expand map
+            </>
+          )}
+        </button>
       </div>
-      
-      <div className="p-4 bg-white shadow-inner">
-        <NotificationCard 
+
+      {/* Scrollable card area below the map */}
+      <div className="flex-1 overflow-y-auto px-4 pt-4 pb-6 space-y-4">
+        <ParkingStatus
+          isParked={isParked}
+          streetName={streetName}
+          sweepingDate={nextSweeping}
+          parkingRestriction={parkingRestriction}
+        />
+
+        <div className="flex justify-center">
+          <ActionButton
+            onClick={handleToggleParking}
+            isParked={isParked}
+          />
+        </div>
+
+        <NotificationCard
           enabled={notificationsEnabled}
           onToggle={handleNotificationToggle}
           nextAlertTime={notificationsEnabled ? getNextAlertTime() : undefined}

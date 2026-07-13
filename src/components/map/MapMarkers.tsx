@@ -1,5 +1,4 @@
 
-import React from 'react';
 import mapboxgl from 'mapbox-gl';
 
 interface MarkerCreatorProps {
@@ -8,17 +7,17 @@ interface MarkerCreatorProps {
   isParked: boolean;
 }
 
-const createLocationMarker = (map: mapboxgl.Map, center: [number, number]) => {
+export const createLocationMarker = (map: mapboxgl.Map, center: [number, number]) => {
   const el = document.createElement('div');
   el.className = 'h-4 w-4 rounded-full bg-blue-500 shadow-lg relative';
   el.innerHTML = '<div class="absolute inset-0 bg-blue-500 rounded-full animate-ping opacity-75"></div>';
-  
+
   return new mapboxgl.Marker(el)
     .setLngLat(center)
     .addTo(map);
 };
 
-const createParkingMarker = (map: mapboxgl.Map, center: [number, number]) => {
+export const createParkingMarker = (map: mapboxgl.Map, center: [number, number]) => {
   const parkingEl = document.createElement('div');
   parkingEl.className = 'h-8 w-8 flex items-center justify-center';
   parkingEl.innerHTML = `
@@ -31,20 +30,15 @@ const createParkingMarker = (map: mapboxgl.Map, center: [number, number]) => {
       </svg>
     </div>
   `;
-  
+
   return new mapboxgl.Marker(parkingEl)
     .setLngLat([center[0] + 0.0005, center[1] + 0.0002])
     .addTo(map);
 };
 
 export const setupMapMarkers = ({ map, center, isParked }: MarkerCreatorProps) => {
-  // Add location marker
-  createLocationMarker(map, center);
-  
-  // Add parking marker if needed
-  if (isParked) {
-    return createParkingMarker(map, center);
-  }
-  
-  return null;
+  const locationMarker = createLocationMarker(map, center);
+  const parkingMarker = isParked ? createParkingMarker(map, center) : null;
+
+  return { locationMarker, parkingMarker };
 };
